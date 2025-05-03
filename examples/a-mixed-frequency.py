@@ -57,6 +57,6 @@ vars = ['growth_rate', 'inf_rate']
 title = 'Real GDP vs PCE Inflation Rate'
 # Plot
 visualizer = mt.TimeseriesVisualizer(data)
-visualizer.subplots('subplots.png', vars, date_start, date_end, is_percent=True)
-visualizer.two_vars('two_vars.png', x_var, y_var, title, date_start, date_end, x_is_percent=True, y_is_percent=True)
-visualizer.multi_lines('multi_lines.png', vars, title, date_start, date_end, is_percent=True)
+visualizer.subplots('examples/subplots.png', vars, date_start, date_end, is_percent=True)
+visualizer.two_vars('examples/two_vars.png', x_var, y_var, title, date_start, date_end, x_is_percent=True, y_is_percent=True)
+visualizer.multi_lines('examples/multi_lines.png', vars, title, date_start, date_end, is_percent=True)

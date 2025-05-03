@@ -2,3 +2,4 @@
 docs/
 *.egg-info/
 *.pyc
+*.png
