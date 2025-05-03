@@ -114,22 +114,21 @@ class Timeseries(pd.Series):
     # copy constructor
     def _update(self, data: pd.Series, transformation: str = None, name: str = ""):
         """
-        Updates the current Timeseries object with new data.
+        Updates the current `Timeseries` object with new data.
 
-        Parameters
-        ----------
-        data : pd.Series
-            The new data to update the Timeseries object with.
-        name : str, optional
-            The name of the variable. If provided, it is updated.
-        transformation : str, optional
-            A transformation applied to the new data. If provided, it is added to the list of transformations.
+        ### Parameters
+        - **data** (`pd.Series`):  
+        The new data to update the `Timeseries` object with.
+        - **name** (`str`, optional):  
+        The name of the variable. If provided, it replaces the current name.
+        - **transformation** (`str`, optional):  
+        A transformation applied to the new data. If provided, it’s added to the list of transformations.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the updated data and transformations.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the updated data and transformations.
         """
+
         if transformation:
             self.transformations.append(transformation)
         if name:
@@ -149,34 +148,32 @@ class Timeseries(pd.Series):
     
     def set_label(self, label: str):
         """
-        Sets the label of the Timeseries object.
+        Sets the label of the `Timeseries` object.
 
-        Parameters
-        ----------
-        label : str
-            The label to set for the Timeseries object.
+        ### Parameters
+        - **label** (`str`):  
+        The label to set for the `Timeseries` object.
         """
         self.label = label
         return self
 
     def __finalize__(self, other, method=None, **kwargs):
-        """
-        Propagate metadata from another Timeseries object to the current instance.
+        r"""
+        Propagates metadata from another `Timeseries` object to the current instance.
 
-        Parameters
-        ----------
-        other : Timeseries
-            The Timeseries object from which to propagate metadata.
-        method : str, optional
-            The method used for propagation. Default is None.
-        **kwargs : 
-            Additional keyword arguments.
+        ### Parameters
+        - **other** (`Timeseries`):  
+        The `Timeseries` object from which to propagate metadata.
+        - **method** (`str`, optional):  
+        The method used for propagation. Default is `None`.
+        - **\*\*kwargs**:  
+        Additional keyword arguments.
 
-        Returns
-        -------
-        self : Timeseries
-            The Timeseries object with propagated metadata.
+        ### Returns
+        - **Timeseries**:  
+        The `Timeseries` object with propagated metadata.
         """
+
         if isinstance(other, Timeseries):
             self.name = getattr(other, 'name', None)
             self.source_freq = getattr(other, 'source_freq', None)
@@ -186,26 +183,26 @@ class Timeseries(pd.Series):
     
     # getters
     def get_freqstr(self):
-        """
-        Returns the frequency of the timeseries.
+        r"""
+        Returns the frequency of the `Timeseries`.
 
-        Returns
-        -------
-        str
-            The frequency of the timeseries.
+        ### Returns
+        - **str**:  
+        The frequency of the timeseries.
         """
+
         return self.index.freqstr
     
     # override string representation
     def __repr__(self):
-        """
-        Returns a string representation of the Timeseries object.
+        r"""
+        Returns a string representation of the `Timeseries` object.
 
-        Returns
-        -------
-        str
-            A string representation of the Timeseries object.
+        ### Returns
+        - **str**:  
+        A string representation of the `Timeseries` object.
         """
+
         # create data display
         temp_data = self.copy().dropna()
         data = ""
@@ -240,14 +237,14 @@ class Timeseries(pd.Series):
 
     # save and load
     def save(self, file_path: str):
-        '''
-        Saves the timeseries to a file.
+        r"""
+        Saves the `Timeseries` to a file.
 
-        Parameters
-        ----------
-        file_path : str
-            The file path to save the timeseries to.
-        '''
+        ### Parameters
+        - **file_path** (`str`):  
+        The file path to save the `Timeseries` to.
+        """
+
         # check if file path has pkl extension
         if 'pkl' not in file_path:
             if '.' in file_path:
@@ -259,14 +256,14 @@ class Timeseries(pd.Series):
             pickle.dump(self, f)
 
     def load(self, file_path):
-        '''
-        Loads the timeseries from a file.
+        """
+        Loads the `Timeseries` from a file.
 
-        Parameters
-        ----------
-        file_path : str
-            The file path to load the timeseries from.
-        '''
+        ### Parameters
+        - **file_path** (`str`):  
+        The file path to load the `Timeseries` from.
+        """
+
         # check if file path has pkl extension
         if 'pkl' not in file_path:
             if '.' in file_path:
@@ -283,16 +280,15 @@ class Timeseries(pd.Series):
         """
         Multiplies the data by a scalar.
 
-        Parameters
-        ----------
-        other : float
-            The scalar to multiply the data by.
+        ### Parameters
+        - **other** (`float`):  
+        The scalar to multiply the data by.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the multiplied data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the multiplied data.
         """
+
         # check if other is a scalar
         if not isinstance(other, (int, float)):
             if other.name is None:
@@ -307,16 +303,15 @@ class Timeseries(pd.Series):
         """
         Divides the data by a scalar.
 
-        Parameters
-        ----------
-        other : float
-            The scalar to divide the data by.
+        ### Parameters
+        - **other** (`float`):  
+        The scalar to divide the data by.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the divided data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the divided data.
         """
+
         if not isinstance(other, (int, float)):
             if other.name is None:
                 other_label = f"series_unknown"
@@ -330,16 +325,15 @@ class Timeseries(pd.Series):
         """
         Adds the data to a scalar.
 
-        Parameters
-        ----------
-        other : float
-            The scalar to add to the data.
+        ### Parameters
+        - **other** (`float`):  
+        The scalar to add to the data.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the added data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the added data.
         """
+
         if not isinstance(other, (int, float)):
             if other.name is None:
                 other_label = f"series_unknown"
@@ -353,16 +347,15 @@ class Timeseries(pd.Series):
         """
         Subtracts the data by a scalar.
 
-        Parameters
-        ----------
-        other : float
-            The scalar to subtract from the data.
+        ### Parameters
+        - **other** (`float`):  
+        The scalar to subtract from the data.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the subtracted data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the subtracted data.
         """
+
         if not isinstance(other, (int, float)):
             if other.name is None:
                 other_label = f"series_unknown"
@@ -374,19 +367,6 @@ class Timeseries(pd.Series):
     
     # Override right operators using operator overloading
     def __rmul__(self, other):
-        """
-        Multiplies the data by a scalar.
-
-        Parameters
-        ----------
-        other : float
-            The scalar to multiply the data by.
-
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the multiplied data.
-        """
         return self.__mul__(other)
     
     def __rtruediv__(self, other):
@@ -400,18 +380,17 @@ class Timeseries(pd.Series):
     
     def parse_date(self, date: str) -> str:
         """
-        Accepts multiple string formats and returns a string in the format 'dd-mmm-yyyy'.
+        Accepts multiple string formats and returns a date string in the format 'dd-mmm-yyyy'.
 
-        Parameters
-        ----------
-        date : str
-            The date to parse.
+        ### Parameters
+        - **date** (`str`):  
+        The date string to parse.
 
-        Returns
-        -------
-        str
-            The parsed date in the format 'dd-mmm-yyyy'.
+        ### Returns
+        - **str**:  
+        The parsed date in the format 'dd-mmm-yyyy'.
         """
+
         if isinstance(date, datetime):
             return date.strftime('%d-%b-%Y')
         else:
@@ -431,18 +410,17 @@ class Timeseries(pd.Series):
         """
         Transforms the data using the log difference method.
 
-        Parameters
-        ----------
-        nlag : int
-            The lag length for the transformation.
-        freq : str, optional
-            Frequency of original data. Default is None.
+        ### Parameters
+        - **nlag** (`int`):  
+        The lag length for the transformation.
+        - **freq** (`str`, optional):  
+        Frequency of the original data. By default inferred from the series.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the transformed data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the transformed data.
         """
+
         trans_freq = self.get_freqstr() if not freq else freq
         annpp = Constants.annscale_map(trans_freq) / nlag
         return self._update(annpp * np.log(self / self.shift(nlag)), f'logdiff_{nlag}_{trans_freq}')
@@ -451,38 +429,37 @@ class Timeseries(pd.Series):
         """
         Transforms the data using the difference method.
 
-        Parameters
-        ----------
-        nlag : int
-            The lag length for the transformation.
+        ### Parameters
+        - **nlag** (`int`):  
+        The lag length for the transformation.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the transformed data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the transformed data.
         """
+
         return self._update(pd.Series(self) - self.shift(nlag), f'diff_{nlag}')
     
     def log(self):
         """
         Transforms the data using the log method.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the transformed data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the transformed data.
         """
+
         return self._update(np.log(self), 'log')
     
     def log100(self):
-        """
-        Transforms the data using the 100 times log method.
+        r"""
+        Transforms the data using the 100x log method.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the transformed data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the transformed data.
         """
+
         return self._update(100 * np.log(self), 'log100')
     
     # Aggregation
@@ -490,18 +467,17 @@ class Timeseries(pd.Series):
         """
         Aggregates the data using the specified method.
 
-        Parameters
-        ----------
-        timestep : str
-            The timestep to aggregate the data (e.g., 'quarterly', 'monthly', 'yearly').
-        method : str
-            The aggregation method to use (e.g., 'lastvalue', 'mean', 'sum').
+        ### Parameters
+        - **timestep** (`str`):  
+        The timestep to aggregate the data (e.g., 'quarterly', 'monthly', 'yearly').
+        - **method** (`str`):  
+        The aggregation method to use (e.g., 'lastvalue', 'mean', 'sum').
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the aggregated data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the aggregated data.
         """
+
         # Perform aggregation using super().resample and the specified aggregation method
         aggregated = pd.Series(getattr(super().resample(timestep), Constants.agg_map[method])()).dropna()
         # Update the current Timeseries object with the aggregated data
@@ -515,18 +491,17 @@ class Timeseries(pd.Series):
         """
         Truncates the data between the specified dates.
 
-        Parameters
-        ----------
-        date_one : str, optional
-            The start date in the format 'dd-mmm-yyyy'. Default is "" (start of data).
-        date_two : str, optional
-            The end date in the format 'dd-mmm-yyyy'. Default is "" (end of data).
+        ### Parameters
+        - **date_one** (`str`, optional):  
+        The start date in 'dd-mmm-yyyy' format. Default is `""` (start of data).
+        - **date_two** (`str`, optional):  
+        The end date in 'dd-mmm-yyyy' format. Default is `""` (end of data).
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the truncated data.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the truncated data.
         """
+
         # Check if date_one and date_two are provided
         if not date_one:
             date_one = self.index[0]
@@ -542,13 +517,13 @@ class Timeseries(pd.Series):
 
     def combine_other(self, data):
         """
-        Replace the data of the Timeseries object with the data available in data.
+        Replaces the data of the `Timeseries` object with the provided data.
 
-        Parameters
-        ----------
-        data : pd.Series
-            The data to replace the Timeseries object with.
+        ### Parameters
+        - **data** (`pd.Series`):  
+        The data to replace the `Timeseries` object with.
         """
+        
         # Go through index of data and replace
         for date in data.index: 
             self.loc[date] = data.loc[date]
@@ -559,11 +534,11 @@ class Timeseries(pd.Series):
         """
         Drops missing values from the data.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the missing values dropped.
+        ### Returns
+        - **Timeseries**:  
+        A new `Timeseries` object with the missing values dropped.
         """
+
         return self._update(super().dropna(*args, **kwargs))
 
     # filters
