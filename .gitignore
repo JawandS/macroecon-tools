@@ -1,5 +1,4 @@
 .venv/
-docs/
 *.egg-info/
 *.pyc
 *.png
