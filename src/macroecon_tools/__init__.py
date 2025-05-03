@@ -17,7 +17,7 @@ Initialization for the `macroecon-tools` package.
   - `get_barnichon()`
   - `get_ludvigson()`
 
-- **`visualizer`**
+- **`TimeseriesVisualizer`**
   - `subplots()`
   - `two_vars()`
   - `multi_lines()`

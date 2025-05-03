@@ -20,33 +20,18 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Import constants
 from constants import Constants
 
+# Documentation customization
+__pdoc__ = {
+    "Timeseries.transformations": None,
+    "Timeseries.source_freq": None,
+    "Timeseries.data_source": None,
+    "Timeseries.label": None,
+    "Timeseries.is_percent": None,
+}
+
 class Timeseries(pd.Series):
     r"""
-    A class used to represent a timeseries object.
-
-    ### Attributes
-    - **data** (`pd.Series`): A single variable in a time table.
-    - **is_copy** (`bool`): Flag to indicate if the data is a copy (used to avoid reindexing to daily).
-    - **name** (`str`): The name of the variable.
-    - **label** (`str`, optional): The label used in visualizations. Defaults to the variable name.
-    - **is_percent** (`bool`, optional): Indicates whether the data is a percent (used in visualizations). Defaults to `False`.
-    - **source_freq** (`str`, optional): Frequency of the data source.
-    - **data_source** (`str`, optional): The source of the data.
-    - **transformations** (`list[str]`): A list of transformations applied to the data.
-
-    ### Methods
-    - **`trans(form, lags=None)`**:  
-    Transforms the data using the specified form (`'logdiff'`, `'diff'`, `'log'`, `'100log'`).  
-    `lags` must be provided for `'logdiff'` and `'diff'`.
-
-    - **`agg(timestep, method)`**:  
-    Aggregates the data to a different frequency (`'quarterly'`, `'monthly'`, `'yearly'`).  
-    The `method` must be specified (e.g., `'lastvalue'`, `'mean'`, `'sum'`).
-
-    - **`filter(method, date_one, date_two, p=None, h=None)`**:  
-    Filters the data using the specified method (`'linear'` or `'hamilton'`).  
-    Requires a start date (`date_one`) and an end date (`date_two`).  
-    For `'hamilton'`, also requires lag length (`p`) and lead length (`h`).
+    An extension of the Series class with customization for Timeseries purposes.
     """
 
     _metadata = ['name', 'label', 'source_freq', 'data_source', 'is_percent', 'transformations']
@@ -58,31 +43,22 @@ class Timeseries(pd.Series):
         ### Parameters
         - **data** (`pd.Series` or array-like):  
         A single variable in a time table.
-
         - **is_copy** (`bool`, optional):  
         If `True`, the data is treated as a copy and not reindexed to daily frequency. Default is `False`.
-
         - **name** (`str`, optional):  
         The name of the variable. Default is `None`.
-
         - **label** (`str`, optional):  
         The label of the variable used in visualizations. Default is the variable name.
-
         - **source_freq** (`str`, optional):  
         The frequency of the source data (e.g., `'quarterly'`, `'monthly'`, `'yearly'`). Default is `"unknown"`.
-
         - **data_source** (`str`, optional):  
         The source of the data. Default is `"unknown"`.
-
         - **is_percent** (`bool`, optional):  
         Indicates if the time series is a percent (used in visualizations). Default is `False`.
-
         - **transformations** (`list[str]`, optional):  
         A list of transformations applied to the data. Default is an empty list.
-
         - **\*args**:  
         Additional positional arguments passed to the `pd.Series` constructor.
-
         - **\*\*kwargs**:  
         Additional keyword arguments passed to the `pd.Series` constructor.
 
@@ -162,12 +138,11 @@ class Timeseries(pd.Series):
 
     def set_percent(self, is_percent: bool = True):
         """
-        Sets the Timeseries object as a percent.
+        Sets the `Timeseries` object as a percent (used for TimeseriesVisualizer)
 
-        Parameters
-        ----------
-        is_percent : bool, optional
-            If True, the Timeseries object is set as a percent. Default is True.
+        ### Parameters
+        - **is_percent** (`bool`, optional):  
+        If `True`, the `Timeseries` object is marked as a percent. Default is `True`.
         """
         self.is_percent = is_percent
         return self
