@@ -21,88 +21,83 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from constants import Constants
 
 class Timeseries(pd.Series):
-    """
+    r"""
     A class used to represent a timeseries object.
 
-    Attributes
-    ----------
-    data : pd.Series
-        a single variable in a time table
-    is_copy : bool
-        a flag to indicate if the data is a copy (avoid reindexing to daily)
-    name : str
-        the name of the variable
-    label : str (optional)
-        the label of the variable used in visualizations. 
-        default is to use the variable name.
-    is_percent : bool (optional)
-        a flag to indicate if the data is a percent (used in visualizations)
-        default is False (not a percent).
-    source_freq : str (optional)
-        the frequency of the data source of the variable
-    data_source : str (optional)
-        the source of the data
-    transformations : list[str]
-        a list of transformations applied to the data
+    ### Attributes
+    - **data** (`pd.Series`): A single variable in a time table.
+    - **is_copy** (`bool`): Flag to indicate if the data is a copy (used to avoid reindexing to daily).
+    - **name** (`str`): The name of the variable.
+    - **label** (`str`, optional): The label used in visualizations. Defaults to the variable name.
+    - **is_percent** (`bool`, optional): Indicates whether the data is a percent (used in visualizations). Defaults to `False`.
+    - **source_freq** (`str`, optional): Frequency of the data source.
+    - **data_source** (`str`, optional): The source of the data.
+    - **transformations** (`list[str]`): A list of transformations applied to the data.
 
-    Methods
-    -------
-    trans(form, lags=None)
-        Transforms the data using the specified form (e.g., 'logdiff', 'diff', 'log', '100log').
-        Must provide number of lags for 'logdiff' and 'diff'.
-    agg(timestep, method)
-        Aggregates the data using the specified method (e.g., 'quarterly', 'monthly', 'yearly').
-        Must provide method (e.g., lastvalue, mean, sum).
-    filter(method, date_one, date_two, p=None, h=None)
-        Filters the data using the specified method (e.g., 'linear' or 'hamilton').
-        Must provide start date (date_one) and end date (date_two).
-        For 'hamilton', must also provide lag length (p) and lead length (h).
+    ### Methods
+    - **`trans(form, lags=None)`**:  
+    Transforms the data using the specified form (`'logdiff'`, `'diff'`, `'log'`, `'100log'`).  
+    `lags` must be provided for `'logdiff'` and `'diff'`.
+
+    - **`agg(timestep, method)`**:  
+    Aggregates the data to a different frequency (`'quarterly'`, `'monthly'`, `'yearly'`).  
+    The `method` must be specified (e.g., `'lastvalue'`, `'mean'`, `'sum'`).
+
+    - **`filter(method, date_one, date_two, p=None, h=None)`**:  
+    Filters the data using the specified method (`'linear'` or `'hamilton'`).  
+    Requires a start date (`date_one`) and an end date (`date_two`).  
+    For `'hamilton'`, also requires lag length (`p`) and lead length (`h`).
     """
+
     _metadata = ['name', 'label', 'source_freq', 'data_source', 'is_percent', 'transformations']
 
     def __init__(self, data, is_copy = False, name: str = None, label: str = "", source_freq: str = "unknown", data_source : str = "unknown", is_percent: bool = False, transformations: list[str] = [], *args, **kwargs):
+        r"""
+        Initializes a `Timeseries` object.
+
+        ### Parameters
+        - **data** (`pd.Series` or array-like):  
+        A single variable in a time table.
+
+        - **is_copy** (`bool`, optional):  
+        If `True`, the data is treated as a copy and not reindexed to daily frequency. Default is `False`.
+
+        - **name** (`str`, optional):  
+        The name of the variable. Default is `None`.
+
+        - **label** (`str`, optional):  
+        The label of the variable used in visualizations. Default is the variable name.
+
+        - **source_freq** (`str`, optional):  
+        The frequency of the source data (e.g., `'quarterly'`, `'monthly'`, `'yearly'`). Default is `"unknown"`.
+
+        - **data_source** (`str`, optional):  
+        The source of the data. Default is `"unknown"`.
+
+        - **is_percent** (`bool`, optional):  
+        Indicates if the time series is a percent (used in visualizations). Default is `False`.
+
+        - **transformations** (`list[str]`, optional):  
+        A list of transformations applied to the data. Default is an empty list.
+
+        - **\*args**:  
+        Additional positional arguments passed to the `pd.Series` constructor.
+
+        - **\*\*kwargs**:  
+        Additional keyword arguments passed to the `pd.Series` constructor.
+
+        ### Raises
+        - **ValueError**: If the index is not a datetime index.
+        - **ValueError**: If the variable name is not provided.
+        - **ValueError**: If the frequency is not provided.
+
+        ### Notes
+        - The data is converted to `float64` type.
+        - If `is_copy` is `False`, the data is reindexed to daily frequency.
+        - The index is converted to a datetime index and its frequency is inferred.
+        - Adding a new parameter also requires updating `_update()`.
         """
-        Initializes a Timeseries object.
 
-        Parameters
-        ----------
-        data : pd.Series or array-like
-            A single variable in a time table.
-        is_copy : bool, optional
-            If True, the data is treated as a copy and not reindexed to daily frequency. Default is False.
-        name : str, optional
-            The name of the variable. Default is None.
-        label : str, optional
-            The label of the variable used in visualizations. Default is the name.
-        source_freq : str, optional
-            The frequency of the source data (e.g., 'quarterly', 'monthly', 'yearly'). Default is "unknown".
-        data_source : str, optional
-            The source of the data. Default is "unknown".
-        is_percent: bool, optional
-            The time series is a percent (used in visualizations). Default is False (not a percent).
-        transformations : list of str, optional
-            A list of transformations applied to the data. Default is an empty list.
-        *args : 
-            Additional positional arguments passed to the pd.Series constructor.
-        **kwargs : 
-            Additional keyword arguments passed to the pd.Series constructor.
-
-        Raises
-        ------
-        ValueError
-            If the index is not a datetime index.
-        ValueError
-            If the variable name is not provided.
-        ValueError
-            If the frequency is not provided.
-
-        Notes
-        -----
-            - The data is converted to float64 type.
-            - If `is_copy` is False, the data is reindexed to daily frequency.
-            - The index is converted to a datetime index and its frequency is inferred.
-            - Adding a new parameter also needs to be reflected in _update.
-        """
         # Make sure all data is valid
         if '.' in data:
             data = data.replace('.', np.nan)

@@ -3,19 +3,24 @@
 # dir_path = os.path.dirname(os.path.realpath(__file__))
 # sys.path.append(dir_path)
 
-"""
-Initialization for the macroecon-tools package. Pulls in classes from:
-- timeseries
-    - Timeseries
-    - TimeseriesTable
-- fetch_data
-    - get_fred()
-    - get_barnichon()
-    - get_ludvigson()
-- visualizer
-    - subplots()
-    - two_vars()
-    - multi_lines()
+r"""
+Initialization for the `macroecon-tools` package.
+
+### Imports from submodules:
+
+- **`timeseries`**
+  - `Timeseries`
+  - `TimeseriesTable`
+
+- **`fetch_data`**
+  - `get_fred()`
+  - `get_barnichon()`
+  - `get_ludvigson()`
+
+- **`visualizer`**
+  - `subplots()`
+  - `two_vars()`
+  - `multi_lines()`
 """
 
 # import submodules
@@ -25,7 +30,7 @@ from .visualizer import *
 
 # add default to pandas
 import pandas as pd
-__all__ = ['Timeseries', 'TimeseriesTable', 'TimeseriesVisualizer', 'get_fred', 'get_barnichon', 'get_ludvigson', 'subplots', 'two_vars', 'multi_lines', 'pd']
+__all__ = ['Timeseries', 'TimeseriesTable', 'TimeseriesVisualizer', 'get_fred', 'get_barnichon', 'get_ludvigson', 'pd']
 
 def __getattr__(name):
     """
