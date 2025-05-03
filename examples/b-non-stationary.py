@@ -9,15 +9,7 @@ import pandas as pd
 from statsmodels.graphics.tsaplots import plot_acf as acf
 #  Time series analysis
 USE_LOCAL_PKG = True
-if not USE_LOCAL_PKG:
-    from macroecon_tools import TimeseriesTable, Timeseries, get_fred, vis_multi_series
-else: # Import local version
-    import os, sys
-    script_dir = os.path.dirname(__file__)
-    sys.path.append(os.path.join(script_dir, '..', 'src', 'macroecon_tools'))
-    from timeseries import TimeseriesTable, Timeseries
-    from fetch_data import get_fred
-    from visualizer import vis_multi_subplots, vis_two_vars, vis_multi_lines
+import macroecon_tools as mt
 
 ### GENERATE STATIONARY DATA ###
 # Assign parameters
@@ -71,7 +63,7 @@ plt.close()
 
 ### RETAIL SALES DATA ###
 # Get data
-data = get_fred(['MRTSSM44000USN'], ['retail'])
+data = mt.get_fred(['MRTSSM44000USN'], ['retail'])
 print(data['retail'])
 
 # Plot non-stationary data
