@@ -292,5 +292,12 @@ class TimeseriesVisualizer:
             ax.margins(y=0.05)
 
             # Save and close the figure
-            plt.savefig(f"{save_path}_{var}.png")
+            save_path = str(save_path)
+            if not save_path.endswith('/'):
+                save_path += '/'
+            if not save_path.endswith('.png'):
+                save_path += '.png'
+            if not save_path.endswith(f"{var}.png"):
+                save_path = save_path.replace('.png', f"{var}.png")
+            plt.savefig(f"{save_path}")
             plt.close()
