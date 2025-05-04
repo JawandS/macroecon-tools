@@ -1,3 +1,9 @@
+"""
+This example demonstrates how to visualize a non-stationary time series and its
+autocorrelation function (ACF) using the macroecon_tools library.
+"""
+
+# ─── DEPENDENCIES ─────────────────────────────────────────────────────────────
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -12,21 +18,7 @@ SEED = 0
 OUTPUT_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-# ─── HELPERS ───────────────────────────────────────────────────────────────────
-def simulate_ar1(rho: float, length: int, seed: int = None) -> pd.Series:
-    """
-    Simulate an AR(1) process y[t] = rho*y[t-1] + eps[t].
-    Returns a pandas Series of length `length` with index 0..length-1.
-    """
-    rng = np.random.default_rng(seed)
-    eps = rng.standard_normal(length)
-    y = np.empty(length)
-    y[0] = 0.0
-    for t in range(1, length):
-        y[t] = rho * y[t - 1] + eps[t]
-    return pd.Series(y, name=f"AR1(ρ={rho})")
-
-
+# ─── HELPER ───────────────────────────────────────────────────────────────────
 def plot_series_and_acf(series: pd.Series, filename: str, title: str = None):
     """
     Plot a time series and its ACF below it, save to OUTPUT_DIR/filename.
@@ -42,27 +34,18 @@ def plot_series_and_acf(series: pd.Series, filename: str, title: str = None):
     fig.savefig(OUTPUT_DIR / filename)
     plt.close(fig)
 
-
-# ─── PART 1: STATIONARY VS NON‑STATIONARY AR(1) ─────────────────────────────────
-for rho, tag in [(0.8, "stationary"), (1.0, "nonstationary")]:
-    sr = simulate_ar1(rho, T, seed=SEED)
-    plot_series_and_acf(
-        sr,
-        filename=f"ar1_{tag}.png",
-        title=f"AR(1) Process (ρ={rho}) — {tag.capitalize()}"
-    )
-
-# ─── PART 2: FRED RETAIL SALES EXAMPLE ──────────────────────────────────────────
+# ─── MAIN ─────────────────────────────────────────────────────────────────────
 # 1) Fetch series from FRED
 data = mt.get_fred({"MRTSSM44000USN": "retail"})
 
 # 2) Visualize raw level
 viz = mt.TimeseriesVisualizer(data)
+data["retail"] = data["retail"].set_label(r"U.S. Retail Sales (MRTSSM44000USN)")
 viz.plot_individual(OUTPUT_DIR, ["retail"])
 
 # 3) Compute and plot year‑over‑year growth (in %)
 data["retail_growth"] = data["retail"].log().diff(12) * 100
-data["retail_growth"].set_label("YoY % Growth: U.S. Retail Sales")
+data["retail_growth"] = data["retail_growth"].set_label(r"YoY % Growth: U.S. Retail Sales")
 viz.plot_individual(OUTPUT_DIR, ["retail_growth"])
 
 # 4) Plot ACF of growth
@@ -74,6 +57,7 @@ plot_series_and_acf(
 
 # 5) Difference again to induce stationarity and plot
 data["retail_diff"] = data["retail_growth"].diff(1)
+data["retail_diff"] = data["retail_diff"].set_label(r"1st Difference: U.S. Retail Sales Growth")
 viz.plot_individual(OUTPUT_DIR, ["retail_diff"])
 plot_series_and_acf(
     data["retail_diff"].dropna(),
