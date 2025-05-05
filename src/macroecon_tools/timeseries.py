@@ -565,16 +565,18 @@ class Timeseries(pd.Series):
         self = self.truncate(date_one, date_two)
         return self._update(detrend(self, axis=0, type='linear'), f'linear_filter_{date_one}_{date_two}')
     
-    def hamilton_filter(self, date_one: str, date_two: str, lag_len: int = None, lead_len: int = None):
+    def hamilton_filter(self, date_one: str = "", date_two: str = "", lag_len: int = None, lead_len: int = None):
         """
         Filters the data using the Hamilton method.
 
         Parameters
         ----------
-        date_one : str
+        date_one : str, optional
             The start date in the format 'dd-mmm-yyyy'.
-        date_two : str
+            Default is "" (start of data).
+        date_two : str, optional
             The end date in the format 'dd-mmm-yyyy'.
+            Default is "" (end of data).
         lagLength : int, optional
             The lag length for the 'hamilton' filter. 
             Default is None (1 for yearly, 4 for quarterly, 12 for monthly).
@@ -605,19 +607,30 @@ class Timeseries(pd.Series):
         else:
             raise ValueError(f'{self.get_freqstr()} frequency not supported for Hamilton filter')
         
+        # Get default dates
+        if not date_two:
+            date_two = self.index[-1]
+
         # get the tstart 
-        date_one_time = datetime.strptime(date_one, '%d-%b-%Y')
-        if self.get_freqstr() in Constants.year_like:
-            tstart = date_one_time - relativedelta(years=(lag_len + lead_len - 1))
-        elif self.get_freqstr() in Constants.quarter_like:
-            tstart = date_one_time - relativedelta(months=3*(lag_len + lead_len - 1))
-        elif self.get_freqstr() in Constants.month_like:
-            tstart = date_one_time - relativedelta(months=(lag_len + lead_len - 1))
+        if date_one:
+            date_one_time = datetime.strptime(date_one, '%d-%b-%Y')
+            if self.get_freqstr() in Constants.year_like:
+                tstart = date_one_time - relativedelta(years=(lag_len + lead_len - 1))
+            elif self.get_freqstr() in Constants.quarter_like:
+                tstart = date_one_time - relativedelta(months=3*(lag_len + lead_len - 1))
+            elif self.get_freqstr() in Constants.month_like:
+                tstart = date_one_time - relativedelta(months=(lag_len + lead_len - 1))
+        else:
+            tstart = self.index[0]
         trham = self.truncate(tstart, date_two)
+
         # Get cyclical component 
         cycle, trend = qe_hamilton_filter(trham, lead_len, lag_len)
+
+        # Convert to pd.Series
         cycle = pd.Series(cycle.flatten(), index=trham.index).dropna()
         trend = pd.Series(trend.flatten(), index=trham.index).dropna()
+
         return cycle, trend, lag_len, lead_len
     
     def hamilton_filter_detrend(self, date_one: str = "", date_two: str = "", lag_len: int = None, lead_len: int = None):
