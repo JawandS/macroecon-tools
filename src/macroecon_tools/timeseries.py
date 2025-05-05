@@ -687,6 +687,10 @@ class Timeseries(pd.Series):
         
         # Apply hp filter
         cycle, trend = hpfilter(self, lamb)
+
+        # Convert to pd.Series
+        cycle = pd.Series(cycle, index=self.index).dropna()
+        trend = pd.Series(trend, index=self.index).dropna()
         return cycle, trend, lamb # cycle, trend
     
     def hp_filter_detrend(self, date_one: str = "", date_two: str = "", lamb: int = None):
