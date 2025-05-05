@@ -774,6 +774,9 @@ class TimeseriesTable(dict):
         value : Timeseries
             The Timeseries object to set.
         """
+        # Convert value to Timeseries if not already
+        if isinstance(value, pd.Series):
+            value = Timeseries(value)
         # update name of the Timeseries
         try:
             value = value._update(value, name=key)
