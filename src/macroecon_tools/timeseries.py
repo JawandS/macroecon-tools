@@ -780,7 +780,7 @@ class TimeseriesTable(dict):
         """
         # Convert value to Timeseries if not already
         if isinstance(value, pd.Series):
-            value = Timeseries(value)
+            value = Timeseries(value, name=key)
         # update name of the Timeseries
         try:
             value = value._update(value, name=key)
