@@ -1,34 +1,24 @@
-# Get current directory
-# import os, sys
-# dir_path = os.path.dirname(os.path.realpath(__file__))
-# sys.path.append(dir_path)
-
 r"""
-Initialization for the `macroecon-tools` package.
+### Overview of Modules:
 
-### Imports from submodules:
+- **Data Structures**
+  - `Timeseries`: extension of `pd.Series` for time series data
+  - `TimeseriesTable`: extension of `pd.DataFrame` for time series data
 
-- **`timeseries`**
-  - `Timeseries`
-  - `TimeseriesTable`
-
-- **`fetch_data`**
-  - `get_fred()`
+- **Data Retrieval** (with automatic caching)
+  - `get_fred()`: fetch data from FRED
   - `get_barnichon()`
   - `get_ludvigson()`
 
-- **`TimeseriesVisualizer`**
-  - `subplots()`
-  - `two_vars()`
-  - `multi_lines()`
+- **`TimeseriesVisualizer`**: plotting options
 """
 
-# import submodules
-from .timeseries import *
-from .fetch_data import *
-from .visualizer import *
+# Import submodules
+from .timeseries import Timeseries, TimeseriesTable
+from .fetch_data import get_fred, get_barnichon, get_ludvigson
+from .visualizer import TimeseriesVisualizer
 
-# add default to pandas
+# Use pandas to default for missing attributes
 import pandas as pd
 __all__ = ['Timeseries', 'TimeseriesTable', 'TimeseriesVisualizer', 'get_fred', 'get_barnichon', 'get_ludvigson', 'pd']
 

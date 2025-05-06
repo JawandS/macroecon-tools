@@ -20,15 +20,6 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Import constants
 from constants import Constants
 
-# Documentation customization
-__pdoc__ = {
-    "Timeseries.transformations": None,
-    "Timeseries.source_freq": None,
-    "Timeseries.data_source": None,
-    "Timeseries.label": None,
-    "Timeseries.is_percent": None,
-}
-
 class Timeseries(pd.Series):
     r"""
     An extension of the Series class with customization for Timeseries purposes.
@@ -125,7 +116,7 @@ class Timeseries(pd.Series):
         A transformation applied to the new data. If provided, it’s added to the list of transformations.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the updated data and transformations.
         """
 
@@ -170,7 +161,7 @@ class Timeseries(pd.Series):
         Additional keyword arguments.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         The `Timeseries` object with propagated metadata.
         """
 
@@ -187,7 +178,7 @@ class Timeseries(pd.Series):
         Returns the frequency of the `Timeseries`.
 
         ### Returns
-        - **str**:  
+        **str**:  
         The frequency of the timeseries.
         """
 
@@ -199,7 +190,7 @@ class Timeseries(pd.Series):
         Returns a string representation of the `Timeseries` object.
 
         ### Returns
-        - **str**:  
+        **str**:  
         A string representation of the `Timeseries` object.
         """
 
@@ -262,6 +253,10 @@ class Timeseries(pd.Series):
         ### Parameters
         - **file_path** (`str`):  
         The file path to load the `Timeseries` from.
+
+        ### Returns
+        **Timeseries**:
+        A new `Timeseries` object loaded from the file.
         """
 
         # check if file path has pkl extension
@@ -285,7 +280,7 @@ class Timeseries(pd.Series):
         The scalar to multiply the data by.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the multiplied data.
         """
 
@@ -308,7 +303,7 @@ class Timeseries(pd.Series):
         The scalar to divide the data by.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the divided data.
         """
 
@@ -330,7 +325,7 @@ class Timeseries(pd.Series):
         The scalar to add to the data.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the added data.
         """
 
@@ -352,7 +347,7 @@ class Timeseries(pd.Series):
         The scalar to subtract from the data.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the subtracted data.
         """
 
@@ -387,7 +382,7 @@ class Timeseries(pd.Series):
         The date string to parse.
 
         ### Returns
-        - **str**:  
+        **str**:  
         The parsed date in the format 'dd-mmm-yyyy'.
         """
 
@@ -417,7 +412,7 @@ class Timeseries(pd.Series):
         Frequency of the original data. By default inferred from the series.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the transformed data.
         """
 
@@ -434,7 +429,7 @@ class Timeseries(pd.Series):
         The lag length for the transformation.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the transformed data.
         """
 
@@ -445,7 +440,7 @@ class Timeseries(pd.Series):
         Transforms the data using the log method.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the transformed data.
         """
 
@@ -456,7 +451,7 @@ class Timeseries(pd.Series):
         Transforms the data using the 100x log method.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the transformed data.
         """
 
@@ -474,7 +469,7 @@ class Timeseries(pd.Series):
         The aggregation method to use (e.g., 'lastvalue', 'mean', 'sum').
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the aggregated data.
         """
 
@@ -498,7 +493,7 @@ class Timeseries(pd.Series):
         The end date in 'dd-mmm-yyyy' format. Default is `""` (end of data).
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the truncated data.
         """
 
@@ -535,7 +530,7 @@ class Timeseries(pd.Series):
         Drops missing values from the data.
 
         ### Returns
-        - **Timeseries**:  
+        **Timeseries**:  
         A new `Timeseries` object with the missing values dropped.
         """
 
@@ -546,18 +541,18 @@ class Timeseries(pd.Series):
         """
         Filters the data using the linear method.
 
-        Parameters
-        ----------
-        date_one : str
-            The start date in the format 'dd-mmm-yyyy'.
-        date_two : str
-            The end date in the format 'dd-mmm-yyyy'.
+        ### Parameters
+        - **date_one** (`str`):  
+        The start date, preferred format: 'dd-mmm-yyyy'.
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the filtered data.
+        - **date_two** (`str`):  
+        The end date, preferred format: 'dd-mmm-yyyy'.
+
+        ### Returns
+        **Timeseries**:  
+        A new `Timeseries` object with the filtered data.
         """
+        # Interpret dates
         date_one = self.parse_date(date_one)
         date_two = self.parse_date(date_two)
 
@@ -569,31 +564,32 @@ class Timeseries(pd.Series):
         """
         Filters the data using the Hamilton method.
 
-        Parameters
-        ----------
-        date_one : str, optional
-            The start date in the format 'dd-mmm-yyyy'.
-            Default is "" (start of data).
-        date_two : str, optional
-            The end date in the format 'dd-mmm-yyyy'.
-            Default is "" (end of data).
-        lagLength : int, optional
-            The lag length for the 'hamilton' filter. 
-            Default is None (1 for yearly, 4 for quarterly, 12 for monthly).
-        leadLength : int, optional
-            The lead length for the 'hamilton' filter.
-            Default is None (2 for yearly, 8 for quarterly, 24 for monthly).
+        ### Parameters
+        - **date_one** (`str`, optional):  
+        The start date in the format 'dd-mmm-yyyy'. Default is `""` (start of data).
 
-        Returns
-        -------
-        Timeseries
-            A new Timeseries object with the filtered data.
+        - **date_two** (`str`, optional):  
+        The end date in the format 'dd-mmm-yyyy'. Default is `""` (end of data).
 
-        Raises
-        ------
-        ValueError
-            If the frequency is not supported for the 'hamilton' filter.
+        - **lagLength** (`int`, optional):  
+        The lag length for the `hamilton` filter. Default is `None` (1 for yearly, 4 for quarterly, 12 for monthly).
+
+        - **leadLength** (`int`, optional):  
+        The lead length for the `hamilton` filter. Default is `None` (2 for yearly, 8 for quarterly, 24 for monthly).
+
+        ### Returns
+        **Tuple (pd.Series, pd.Series, int, int)**:  
+        A tuple containing:
+            - `cycle` (`pd.Series`): The cyclical component of the data.
+            - `trend` (`pd.Series`): The trend component of the data.
+            - `lag_len` (`int`): The lag length used in the filter.
+            - `lead_len` (`int`): The lead length used in the filter.
+
+        ### Raises
+        - **ValueError**:  
+        If the frequency is not supported for the `hamilton` filter.
         """
+
         # get default lag and lead lengths
         if self.get_freqstr() in Constants.year_like:
             lag_len = 1
@@ -637,17 +633,25 @@ class Timeseries(pd.Series):
         """
         Filters the data using the Hamilton method.
 
-        Parameters
-        ----------
-        date_one : str
-            The start date in the format 'dd-mmm-yyyy'.
-        date_two : str
-            The end date in the format 'dd-mmm-yyyy'.
-        lag_len : int, optional
-            The lag length for the 'hamilton' filter. 
-            Default is None (1 for yearly, 4 for quarterly, 12 for monthly).
-        lead_len : int, optional
+        ### Parameters
+        - **date_one** (`str`):  
+        The start date in the format 'dd-mmm-yyyy'.
+
+        - **date_two** (`str`):  
+        The end date in the format 'dd-mmm-yyyy'.
+
+        - **lag_len** (`int`, optional):  
+        The lag length for the `hamilton` filter.  
+        Default is `None` (1 for yearly, 4 for quarterly, 12 for monthly).
+
+        - **lead_len** (`int`, optional):  
+        The lead length for the `hamilton` filter. Default is `None`.
+
+        ### Returns
+        **Timeseries**:
+        A new `Timeseries` object with the detrended data.
         """
+
         # Add default dates
         if not date_one:
             date_one = self.index[0]
@@ -664,17 +668,20 @@ class Timeseries(pd.Series):
         """
         Implements the hp (Hodrick-Prescott) filter.
 
-        Parameters
-        ----------
-        date_one : str, optional
-            The start date in the format 'dd-mmm-yyyy'. 
-            Default is "" (start of data).
-        date_two : str, optional
-            The end date in the format 'dd-mmm-yyyy'.
-            Default is "" (end of data).
-        lamb : int, optional
-            The smoothing parameter for the hp filter.
-            Default is None (6.25 for yearly, 1600 for quarterly, 129600  for monthly).
+        ### Parameters
+        - **date_one** (`str`, optional):
+        The start date in the format 'dd-mmm-yyyy'. Default is `""` (start of data).
+        - **date_two** (`str`, optional):
+        The end date in the format 'dd-mmm-yyyy'. Default is `""` (end of data).
+        - **lamb** (`int`, optional):
+        The smoothing parameter for the hp filter. Default is `None` (6.25 for yearly, 1600 for quarterly, 129600 for monthly).
+
+        ### Returns
+        **Tuple (pd.Series, pd.Series, int)**:
+        A tuple containing:
+            - `cycle` (`pd.Series`): The cyclical component of the data.
+            - `trend` (`pd.Series`): The trend component of the data.
+            - `lamb` (`int`): The smoothing parameter used in the filter.
         """
         # Parse dates
         if not date_one:
@@ -710,17 +717,17 @@ class Timeseries(pd.Series):
         """
         Implements the hp (Hodrick-Prescott) filter.
 
-        Parameters
-        ----------
-        date_one : str, optional
-            The start date in the format 'dd-mmm-yyyy'. 
-            Default is "" (start of data).
-        date_two : str, optional
-            The end date in the format 'dd-mmm-yyyy'.
-            Default is "" (end of data).
-        lamb : int, optional
-            The smoothing parameter for the hp filter.
-            Default is None (6.25 for yearly, 1600 for quarterly, 129600  for monthly).
+        ### Parameters
+        - **date_one** (`str`, optional):
+        The start date in the format 'dd-mmm-yyyy'. Default is `""` (start of data).
+        - **date_two** (`str`, optional):
+        The end date in the format 'dd-mmm-yyyy'. Default is `""` (end of data).
+        - **lamb** (`int`, optional):
+        The smoothing parameter for the hp filter. Default is `None` (6.25 for yearly, 1600 for quarterly, 129600 for monthly).
+
+        ### Returns
+        **Timeseries**:
+        A new `Timeseries` object with the detrended data.
         """
         # get cycle and trend
         cycle, trend, lamb = self.hp_filter(date_one, date_two, lamb)
@@ -769,10 +776,9 @@ class TimeseriesTable(dict):
         """
         Initializes the TimeseriesTable. Ensures columns are Timeseries instances.
 
-        Parameters
-        ----------
-        data : dict, pd.DataFrame, optional
-            A dictionary where keys are column names and values are Timeseries instances or a pd.DataFrame.
+        ### Parameters
+        - **data** (`dict` or `pd.DataFrame`, optional):
+        A dictionary where keys are column names and values are Timeseries instances or a pd.DataFrame.
         """
         # Handle pd.DataFrame
         if isinstance(data, pd.DataFrame):
@@ -812,10 +818,14 @@ class TimeseriesTable(dict):
         """
         Returns the TimeseriesTable as a DataFrame.
 
-        Returns
-        -------
-        pd.DataFrame
-            A DataFrame representation of the TimeseriesTable.
+        ### Returns
+        **pd.DataFrame**:
+        A DataFrame representation of the TimeseriesTable.
+
+        ### Notes
+        - The DataFrame is built by concatenating all Timeseries objects in the dictionary.
+        - The index is set to the union of all Timeseries indices.
+        - The DataFrame is reindexed to daily frequency and missing values are dropped.
         """
         # Reindex all columns to daily frequency
         return pd.concat({key: val.asfreq('D') for key, val in self.items()}, axis=1).dropna(how='all')
@@ -862,18 +872,24 @@ class TimeseriesTable(dict):
     
     # Utility
     def apply(self, func, *args, **kwargs):
-        """
-        Applies a function to the data.
+        r"""
+        Applies a function to each Timeseries in the TimeseriesTable.
 
-        Parameters
-        ----------
-        func : function
-            The function to apply to the data.
+        ### Parameters
+        - **func** (`function`):
+        The function to apply to each Timeseries.
+        - **\*args**:
+        Additional positional arguments to pass to the function.
+        - **\*\*kwargs**:
+        Additional keyword arguments to pass to the function.
 
-        Returns
-        -------
-        pd.DataFrame
-            A DataFrame with the function applied to the data.
+        ### Returns
+        **TimeseriesTable**:
+        A new TimeseriesTable object with the function applied to each Timeseries.
+        
+        ### Notes
+        - The function should accept a Timeseries object as its first argument.
+        - The function should return a Timeseries object.
         """
         return TimeseriesTable({key: func(val, *args, **kwargs) for key, val in self.items()})
 
@@ -882,21 +898,18 @@ class TimeseriesTable(dict):
         """
         Truncates the data between the specified dates.
 
-        Parameters
-        ----------
-        date_one : str, optional
-            The start date in the format 'dd-mmm-yyyy'. Default is "" (start of data).
-        date_two : str, optional
-            The end date in the format 'dd-mmm-yyyy'. Default is "" (end of data).
+        ### Parameters
+        - **date_one** (`str`, optional):
+        The start date in the format 'dd-mmm-yyyy'. Default is `""` (start of data).
+        - **date_two** (`str`, optional):
+        The end date in the format 'dd-mmm-yyyy'. Default is `""` (end of data).
 
-        Returns
-        -------
-        TimeseriesTable
-            A new TimeseriesTable object with the truncated data.
-        
-        Notes
-        -----
-            - Assumes that date parsing is handled by the Timeseries.truncate method.
+        ### Returns
+        **TimeseriesTable**:
+        A new TimeseriesTable object with the truncated data.
+
+        ### Notes
+        - Assumes that date parsing is handled by the Timeseries.truncate method.
         """
         # update self data
         return TimeseriesTable({key: val.truncate(date_one, date_two) for key, val in self.items()})
@@ -906,10 +919,13 @@ class TimeseriesTable(dict):
         """
         Drops missing values from the data.
 
-        Returns
-        -------
-        TimeseriesTable
-            A new TimeseriesTable object with the missing values dropped.
+        ### Returns
+        **TimeseriesTable**:
+        A new TimeseriesTable object with the missing values dropped.
+
+        ### Notes
+        - The dropna method is applied to each Timeseries in the TimeseriesTable.
+        - The method accepts the same arguments as the pandas dropna method.
         """
         return TimeseriesTable({key: val.dropna(*args, **kwargs) for key, val in self.items()})
     
@@ -918,12 +934,12 @@ class TimeseriesTable(dict):
         """
         Aggregates the data using the specified method.
 
-        Parameters
-        ----------
-        timestep : str
-            The timestep to aggregate the data (e.g., 'quarterly', 'monthly', 'yearly').
-        method: str
-            The aggregation method to use (e.g., 'lastvalue', 'mean', 'sum').
+        ### Parameters
+        - **timestep** (`str`):  
+        The timestep to aggregate the data (e.g., `'quarterly'`, `'monthly'`, `'yearly'`).
+
+        - **method** (`str`):  
+        The aggregation method to use (e.g., `'lastvalue'`, `'mean'`, `'sum'`).
         """
         return TimeseriesTable({key: val.aggregate(timestep, method) for key, val in self.items()})
 
@@ -932,23 +948,22 @@ class TimeseriesTable(dict):
         """
         Returns the correlation matrix of the data.
 
-        Parameters
-        ----------
-        var_one : str, optional
-            The first variable to compute the correlation matrix. Default is "".
-        var_two : str, optional
-            The second variable to compute the correlation matrix. Default is "".
+        ### Parameters
+        - **var_one** (`str`, optional):  
+        The first variable to compute the correlation matrix. Default is `""`.
 
-        Returns
-        -------
-        pd.DataFrame
-            A DataFrame with the correlation matrix.
+        - **var_two** (`str`, optional):  
+        The second variable to compute the correlation matrix. Default is `""`.
 
-        Notes
-        -----
-            - If `var_one` and `var_two` are provided, the correlation between the two variables is returned.
-            - If only `var_one` is provided, the correlation between `var_one` and all other variables is returned.
+        ### Returns
+        - **pd.DataFrame**:  
+        A DataFrame with the correlation matrix.
+
+        ### Notes
+        - If both `var_one` and `var_two` are provided, the correlation between the two variables is returned.
+        - If only `var_one` is provided, the correlation between `var_one` and all other variables is returned.
         """
+
         if var_one and var_two:
             return self.df[var_one].corr(self.df[var_two])
         elif var_one:
@@ -960,25 +975,24 @@ class TimeseriesTable(dict):
     @staticmethod
     def apply_moment_func(data: Timeseries, moment: str):
         """
-        Computes the specified statistical moment for a given Timeseries.
+        Computes the specified statistical moment for a given `Timeseries`.
 
-        Parameters
-        ----------
-        data : Timeseries
-            The data to compute the moment on.
-        moment : str
-            The statistical moment to compute. Options are 'mean', 'SD', 'Skew', 'Kurt', 'min', 'max'.
+        ### Parameters
+        - **data** (`Timeseries`):  
+        The data to compute the moment on.
 
-        Returns
-        -------
-        pd.Series
-            A new Series object with the computed moment.
+        - **moment** (`str`):  
+        The statistical moment to compute. Options are `'mean'`, `'SD'`, `'Skew'`, `'Kurt'`, `'min'`, `'max'`.
 
-        Raises
-        ------
-        ValueError
-            If the specified moment is not available.
+        ### Returns
+        - **pd.Series**:  
+        A new Series object with the computed moment.
+
+        ### Raises
+        - **ValueError**:  
+        If the specified moment is not available.
         """
+        # Check if moment is available
         if moment == 'mean':
             return data.mean()
             # return lambda X: np.nanmean(X, axis=0)
@@ -1004,18 +1018,20 @@ class TimeseriesTable(dict):
         """
         Computes specified statistical moments for given variables in a dataset.
 
-        Parameters
-        ----------
-        vars : list of str
-            The list of variable names for which to display the moments. Default is an empty list (all variables).
-        moments : list of str
-            The list of moments to compute. Options are 'mean', 'SD', 'Skew', 'Kurt', 'min', 'max'. Default is an empty list (all moments).
+        ### Parameters
+        - **vars** (`list[str]`):  
+        The list of variable names for which to display the moments.  
+        Default is an empty list (all variables).
 
-        Returns
-        -------
-        None
-            Prints the table of computed moments for the specified variables.
+        - **moments** (`list[str]`):  
+        The list of moments to compute. Options are `'mean'`, `'SD'`, `'Skew'`, `'Kurt'`, `'min'`, `'max'`.  
+        Default is an empty list (all moments).
+
+        ### Returns
+        - **None**:  
+        Prints the table of computed moments for the specified variables.
         """
+
         # Parse input
         if len(vars) == 0:
             vars = self.df.columns
@@ -1046,14 +1062,14 @@ class TimeseriesTable(dict):
     
     # save and load
     def save(self, file_path):
-        '''
+        """
         Saves the TimeseriesTable to a file.
 
-        Parameters
-        ----------
-        file_path : str
-            The file path to save the TimeseriesTable to.
-        '''
+        ### Parameters
+        - **file_path** (`str`):
+        The file path to save the TimeseriesTable to.
+        """
+
         # check if file path has pkl extension
         if 'pkl' not in file_path:
             if '.' in file_path:
@@ -1065,14 +1081,17 @@ class TimeseriesTable(dict):
             pickle.dump(self, f)
 
     def load(self, file_path):
-        '''
+        """
         Loads the TimeseriesTable from a file.
 
-        Parameters
-        ----------
-        file_path : str
-            The file path to load the TimeseriesTable from.
-        '''
+        ### Parameters
+        - **file_path** (`str`):
+        The file path to load the TimeseriesTable from.
+
+        ### Returns
+        **TimeseriesTable**:
+        A new TimeseriesTable object loaded from the file.
+        """
         # check if file path has pkl extension
         if 'pkl' not in file_path:
             if '.' in file_path:
