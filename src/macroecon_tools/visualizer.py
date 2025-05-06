@@ -5,10 +5,9 @@ class TimeseriesVisualizer:
     """
     A class for visualizing timeseries data using various plotting methods.
 
-    Attributes
-    ----------
-    data : TimeseriesTable
-        The timeseries data to be visualized.
+    ### Attributes
+    - **data** (`TimeseriesTable`):  
+    The timeseries data to be visualized.
     """
 
     def __init__(self, data: TimeseriesTable):
@@ -26,14 +25,21 @@ class TimeseriesVisualizer:
         """
         Adjust subplot positions.
 
-        Parameters:
-            top: Top margin (default: 0.11)
-            left: Left margin (default: 0.075)
-            vspace: Vertical space between subplots (default: 0.065)
-            hspace: Horizontal space between subplots (default: 0.07)
-            right: Right margin (default: 0.02)
-            bottom: Bottom margin (default: 0.04)
+        ### Parameters
+        - **top** (`float`, optional):  
+        Top margin. Default is `0.1`.
+        - **left** (`float`, optional):  
+        Left margin. Default is `0.1`.
+        - **vspace** (`float`, optional):  
+        Vertical space between subplots. Default is `0.1`.
+        - **hspace** (`float`, optional):  
+        Horizontal space between subplots. Default is `0.1`.
+        - **right** (`float`, optional):  
+        Right margin. Default is `0.05`.
+        - **bottom** (`float`, optional):  
+        Bottom margin. Default is `0.1`.
         """
+
         # Get all axes (subplots) in the current figure, sorted top-left to bottom-right
         axes = sorted(plt.gcf().get_axes(), key=lambda ax: (-ax.get_position().y0, ax.get_position().x0))
 
@@ -56,23 +62,21 @@ class TimeseriesVisualizer:
         """
         Creates a plot of multiple timeseries data in separate subplots.
 
-        Parameters
-        ----------
-        save_path : str
-            The path to save the plot.
-        variables : list[str], optional
-            A list of variables to plot. If None, all variables in the data are plotted.
-        start_date : str, optional
-            The start date for the plot.
-        end_date : str, optional
-            The end date for the plot.
-        is_percent : bool, optional
-            Whether to format the y-axis as percentages.
-
-        Notes
-        -----
-        - Plot titles and axis labels can be adjusted with varialbe.set_label() and variable.set_percent().
+        ### Parameters
+        - **save_path** (`str`):  
+        The path to save the plot.
+        - **variables** (`list[str]`, optional):  
+        A list of variables to plot. If `None`, all variables in the data are plotted.
+        - **start_date** (`str`, optional):  
+        The start date for the plot.
+        - **end_date** (`str`, optional):  
+        The end date for the plot.
+        - **is_percent** (`bool`, optional):  
+        Whether to format the y-axis as percentages.
+        ### Notes
+        - Plot titles and axis labels can be adjusted using `.set_label()` and `.set_percent()` on each `Timeseries` variable.
         """
+
         # Use all variables if none are provided
         if variables is None:
             variables = list(self.data.df.columns)
@@ -135,29 +139,28 @@ class TimeseriesVisualizer:
         """
         Plot two variables against each other in one graph.
 
-        Parameters
-        ----------
-        save_path : str
-            The path to save the plot.
-        x_var : str
-            The variable for the x-axis.
-        y_var : str
-            The variable for the y-axis.
-        title : str, optional
-            The title of the plot.
-        start_date : str, optional
-            The start date for the plot.
-        end_date : str, optional
-            The end date for the plot.
-        x_is_percent : bool, optional
-            Whether to format the x-axis as percentages.
-        y_is_percent : bool, optional
-            Whether to format the y-axis as percentages.
-        
-        Notes
-        -----
-        - Plot titles and axis labels can be adjusted with varialbe.set_label() and variable.set_percent().
+        ### Parameters
+        - **save_path** (`str`):  
+        The path to save the plot.
+        - **x_var** (`str`):  
+        The variable for the x-axis.
+        - **y_var** (`str`):  
+        The variable for the y-axis.
+        - **title** (`str`, optional):  
+        The title of the plot.
+        - **start_date** (`str`, optional):  
+        The start date for the plot.
+        - **end_date** (`str`, optional):  
+        The end date for the plot.
+        - **x_is_percent** (`bool`, optional):  
+        Whether to format the x-axis as percentages.
+        - **y_is_percent** (`bool`, optional):  
+        Whether to format the y-axis as percentages.
+
+        ### Notes
+        - Plot titles and axis labels can be adjusted using `.set_label()` and `.set_percent()` on each `Timeseries` variable.
         """
+
         # Determine the overlap of the two variables in the specified date range
         if not start_date:
             start_date = max(self.data.df[x_var].index[0], self.data.df[y_var].index[0])
@@ -192,22 +195,27 @@ class TimeseriesVisualizer:
         """
         Plot multiple variables on one graph.
 
-        Parameters
-        ----------
-        save_path : str
-            The path to save the plot.
-        variables : list[str], optional
-            A list of variables to plot.
-            Default: [], plot all variables.
-        title : str
-            The title of the plot.
-        start_date : str, optional
-            The start date for the plot.
-        end_date : str, optional
-            The end date for the plot.
-        is_percent : bool, optional
-            Whether to format the y-axis as percentages.
+        ### Parameters
+        - **save_path** (`str`):  
+        The path to save the plot.
+
+        - **variables** (`list[str]`, optional):  
+        A list of variables to plot.  
+        Default is `[]`, which plots all variables.
+
+        - **title** (`str`):  
+        The title of the plot.
+
+        - **start_date** (`str`, optional):  
+        The start date for the plot.
+
+        - **end_date** (`str`, optional):  
+        The end date for the plot.
+
+        - **is_percent** (`bool`, optional):  
+        Whether to format the y-axis as percentages.
         """
+
         # Default to the full range of the data if no start or end dates are provided
         if not start_date:
             start_date = min(self.data.df[var].index[0] for var in variables)
@@ -246,23 +254,24 @@ class TimeseriesVisualizer:
         """
         Generate individual figures for the variables specified in the data.
 
-        Parameters
-        ----------
-        save_path : str
-            The path to save the plot. Figures saved as f"{save_path}_{variable_name}.png".
-        variables : list[str], optional
-            A list of variables to plot. 
-            Default: [] (plot all variables).
-        start_date : str, optional
-            The start date for the plot.
-            Default: "" (full range).
-        end_date : str, optional
-            The end date for the plot.
-            Default: "" (full range).
-        is_percent : bool, optional
-            Whether to format the y-axis as percentages.
-            Default: False (format as integers).
+        ### Parameters
+        - **save_path** (`str`):  
+        The path to save the plot.  
+        Figures are saved as `"{save_path}_{variable_name}.png"`.
+        - **variables** (`list[str]`, optional):  
+        A list of variables to plot.  
+        Default is `[]` (plot all variables).
+        - **start_date** (`str`, optional):  
+        The start date for the plot.  
+        Default is `""` (full range).
+        - **end_date** (`str`, optional):  
+        The end date for the plot.  
+        Default is `""` (full range).
+        - **is_percent** (`bool`, optional):  
+        Whether to format the y-axis as percentages.  
+        Default is `False` (format as integers).
         """
+
         # Use all variables if none are provided
         if len(variables) == 0:
             variables = list(self.data.df.columns)

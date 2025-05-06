@@ -24,43 +24,50 @@ def get_cache_dir():
     return os.path.join(os.path.expanduser('~'), '.macro_cache')
 
 def parse_year(year: str) -> datetime:
-    '''
-    Get year, month, day from %Y.%f
-    '''
+    """
+    Parse a year string into a datetime object.
+
+    ### Parameters
+    - **year** (`str`):
+    Year string in the format 'YYYY.QQ' or 'YYYY.MM'.
+
+    ### Returns
+    **datetime**:
+    Datetime object representing the year, month, and day.
+    """
     year_int = int(year)
     month = int((year % 1) * 12) + 1
     day = int(((year % 1) * 12) % 1 * 30) + 1 
     return datetime(year_int, month, day)
 
 def get_fred(data_sources: dict[str, str], start_date: str = "", end_date: str = "", api_key=None, force_fetch=False, verbose=False):
-    '''
-    Get data from FRED.
+    """
+    Get data from FRED (Federal Reserve Economic Data).
 
-    Parameters
-    ----------
-    data_sources : dict[str, str] or list[str]
-        Dictionary or list of FRED series IDs and names to assign to the data. If the value is None, the series ID is used as the name.
-    date_one : str, optional
-        Start date for data. Default is "".
-    date_two : str, optional
-        End date for data. Default is "".
-    api_key : str, optional
-        API key for FRED. Default is None (not needed if using cached data).
-    force_fetch : bool, optional
-        Force fetching data from FRED. Default is False.
-    verbose : bool, optional
-        Print verbose output. Default is False.
+    ### Parameters
+    - **data_sources** (`dict[str, str]` or `list[str]`):  
+    Dictionary or list of FRED series IDs and names to assign to the data.  
+    If the value is `None`, the series ID is used as the name.
+    - **date_one** (`str`, optional):  
+    Start date for data. Default is `""`.
+    - **date_two** (`str`, optional):  
+    End date for data. Default is `""`.
+    - **api_key** (`str`, optional):  
+    API key for FRED. Default is `None` (not needed if using cached data).
+    - **force_fetch** (`bool`, optional):  
+    Force fetching data from FRED. Default is `False`.
+    - **verbose** (`bool`, optional):  
+    Print verbose output. Default is `False`.
 
-    Returns
-    -------
-    mt.TimeseriesTable
-        Table of FRED data.
-    
-    Notes
-    -----
+    ### Returns
+    **mt.TimeseriesTable**:  
+    Table of FRED data.
+
+    ### Notes
     - Data is automatically set to year/quarter/month-end frequency and reindexed daily.
-    - Caching is used to store data for one week before fetching new data from FRED (use force_fetch=True to ignore cache).
-    '''
+    - Caching is used to store data for one week before fetching new data from FRED (use `force_fetch=True` to ignore cache).
+    """
+
     try:
         # Look for api key 
         if api_key is None: # Load API key
@@ -182,30 +189,28 @@ def get_fred(data_sources: dict[str, str], start_date: str = "", end_date: str =
             raise e
 
 def get_barnichon(filepath: str, table: mt.TimeseriesTable, input_var: str, output_name: str):
-    '''
+    """
     Get vacancy rate data from Barnichon.
 
-    Parameters
-    ----------
-    filepath : str
-        Path to Barnichon file.
-    table : mt.TimeseriesTable
-        Table to store data.
-    input_var : str
-        Input variable to use.
-    output_name : str
-        Name to assign to the output variable.
+    ### Parameters
+    - **filepath** (`str`):  
+    Path to the Barnichon data file.
+    - **table** (`mt.TimeseriesTable`):  
+    Table to store the data.
+    - **input_var** (`str`):  
+    Input variable to use.
+    - **output_name** (`str`):  
+    Name to assign to the output variable.
 
-    Returns
-    -------
-    mt.TimeseriesTable
-        Table with vacancy rate data.
+    ### Returns
+    **mt.TimeseriesTable**:  
+    Table with vacancy rate data.
 
-    Notes
-    -----
+    ### Notes
     - Data is automatically set to quarterly frequency.
     - Necessary data is automatically fetched from FRED if needed.
-    '''
+    """
+
     # read data from barnichon file
     barnichon_data = pd.read_csv(filepath)
     barnichon_data['year'] = barnichon_data['year'].apply(parse_year)
@@ -233,19 +238,19 @@ def get_barnichon(filepath: str, table: mt.TimeseriesTable, input_var: str, outp
     return table
 
 def get_ludvigson():
-    '''
-    Get macroeconomics uncertaintity data from Ludvigson.
+    """
+    Get macroeconomics uncertainty data from Ludvigson.
 
-    Returns
-    -------
-    dict
-        Dictionary of TimeseriesTables for each data source (FinancialUncertainty, MacroUncertainty, RealUncertainty).
+    ### Returns
+    **dict**:  
+    Dictionary of `TimeseriesTable` objects for each data source  
+    (`FinancialUncertainty`, `MacroUncertainty`, `RealUncertainty`).
 
-    Notes
-    -----
+    ### Notes
     - Data is automatically set to monthly frequency.
     - Caching is used to store data for one week.
-    '''
+    """
+
     # Define data source
     DATA_SOURCE = 'https://www.sydneyludvigson.com/s/MacroFinanceUncertainty_202408Update.zip'
     
